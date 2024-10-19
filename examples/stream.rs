@@ -75,11 +75,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         env::set_var("SANE_DEBUG_NET", "255");
     }
     let sane = sane_scan::Sane::init_1_0()?;
-    let desired_device = "brother5:net1;dev0";
     for dev in sane.get_devices()? {
         println!("{dev:?}");
-        if dev.name.to_str()? == desired_device {
-            println!("Opening {desired_device}");
+        if dev.name.to_str()?.starts_with("brother") {
+            println!("Opening");
             println!("\t{:?}", dev.name);
             println!("\t{:?}", dev.vendor);
             println!("\t{:?}", dev.model);
@@ -92,27 +91,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "Setting source: {:?}",
                 dh.set_opt_string("source", "FlatBed")?
             );
-            /*
-                        println!(
-                            "Setting mode: {:?}",
-                            dh.set_opt_string("mode", "24bit Color[Fast]")?
-                        );
+            println!(
+                "Setting mode: {:?}",
+                dh.set_opt_string("mode", "24bit Color[Fast]")?
+            );
 
-                        dh.print_options()?;
+            println!("Setting tl-x: {:?}", dh.set_opt_fixed("tl-x", 0)?);
+            println!("Setting tl-y: {:?}", dh.set_opt_fixed("tl-y", 0)?);
+            println!("Setting br-x: {:?}", dh.set_opt_fixed("br-x", 13887078)?);
+            println!("Setting br-y: {:?}", dh.set_opt_fixed("br-y", 23304601)?);
 
+            println!(
+                "Setting resolution: {:?}",
+                dh.set_opt_fixed("resolution", 100)?
+            );
 
-                        println!("Setting tl-x: {:?}", dh.set_opt_fixed("tl-x", 0)?);
-                        println!("Setting tl-y: {:?}", dh.set_opt_fixed("tl-y", 0)?);
-                        println!("Setting br-x: {:?}", dh.set_opt_fixed("br-x", 10)?);
-                        println!("Setting br-y: {:?}", dh.set_opt_fixed("br-y", 10)?);
-
-                        println!(
-                            "Setting resolution: {:?}",
-                            dh.set_opt_fixed("resolution", 100)?
-                        );
-
-                        dh.print_options()?;
-            */
             println!("Starting scan");
             println!("{:#?}", dh.start_scan()?);
             let mut buf = [0; 1024 * 1024];
