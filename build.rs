@@ -30,6 +30,11 @@ fn main() {
         )
         .unwrap();
 
+    // TODO: figure out how to do this on NixOS
+    // Maybe something with `sane-config --libs`
+    //println!("cargo::rustc-link-search=/nix/store/q98nmcaxz1cq6jhphjkfrjzfr8iylh8c-sane-backends-1.3.1/lib");
+    //println!("cargo::rustc-link-search=/nix/store/3vkr6dbm3nh8k1y18z1b6sin7zd5fgjk-sane-backends-1.2.1/lib");
+    println!("cargo::rustc-link-search=/nix/store/k8pgpln70lpjwjyqsa25zkq37n5nm0c4-sane-backends-1.3.1/lib");
     println!("cargo:rustc-link-lib=sane");
 }
 
